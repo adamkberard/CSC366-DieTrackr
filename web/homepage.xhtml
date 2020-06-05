@@ -24,7 +24,7 @@
                     <h:selectOneMenu value="#{login.user.choice}">
                         <f:selectItems value="#{login.user.getHomepageChoices()}"/>
                     </h:selectOneMenu>
-                    <h:commandButton value = "Go" action="#{selector.transition()}"/>
+                    <h:commandButton value = "Go" action="#{login.user.transition()}"/>
                 </h:form>
             </ui:define>
 

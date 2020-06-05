@@ -101,9 +101,22 @@ public class Login implements Serializable {
         return "success";
     }
      
-    public String register() {
-        //Util.invalidateUserSession();
-        return "register";
+    public String register() throws ValidatorException, SQLException {
+        String temp = registration.register();
+        username = null;
+        password = null;
+        if(temp.equals("success")){
+            String temmpUser = registration.getUsername();
+            String tempRole = registration.getRole();
+            int tempUid = registration.getUid();
+            registration = null;
+            user = new User(temmpUser, tempRole, tempUid);
+            return "success";
+        }
+        else{
+            registration = null;
+            return "fail";
+        }
     }
     
     public String logout() {

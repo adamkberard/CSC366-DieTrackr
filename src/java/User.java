@@ -36,8 +36,13 @@ public class User implements Serializable {
         uid = aUid;
     }
     
-    public String[] getHomepageChoices(){
-        return new String[]{"option 1", "option 2"};
+    public List<String> getHomepageChoices(){
+        List<String> returnable = new ArrayList<>();
+        returnable.add("Start Game");
+        returnable.add("End Game");
+        returnable.add("See Passed Games");
+        returnable.add("Create Game");
+        return returnable;
     }
     
     public List<User> getUsers() throws SQLException{
@@ -63,5 +68,21 @@ public class User implements Serializable {
         con.close();
         
         return userList;
+    }
+    
+    public String transition() {
+
+        switch (choice) {
+            case "Start Game":
+                return "startGame";
+            case "Create Team":
+                return "createTeam";
+            case "End Game":
+                return "endGame";
+            case "See Passed Games":
+                return "seePassedGames";
+            default:
+                return null;
+        }
     }
 }

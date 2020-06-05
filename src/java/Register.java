@@ -1,17 +1,13 @@
-
-import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.annotation.ManagedBean;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
-import javax.inject.Named;
 
 
 /*
@@ -27,6 +23,7 @@ public class Register{
 
     private String username;
     private String password;
+    private int uid;
     private String email;
     private String role;
     private String passwordErrorMessage;
@@ -47,6 +44,9 @@ public class Register{
     public String getUsernameErrorMessage() {return usernameErrorMessage;}
     public UIInput getLoginUI() {return loginUI;}
     public void setLoginUI(UIInput loginUI) {this.loginUI = loginUI;}
+    public int getUid(){return uid;}
+    public void setUid(int uid) {this.uid = uid;}
+    
     
     public void validateUsername(FacesContext context, UIComponent component, Object value)
             throws ValidatorException, SQLException{
@@ -82,7 +82,7 @@ public class Register{
         }
     }
 
-    public String go() throws ValidatorException, SQLException {
+    public String register() throws ValidatorException, SQLException {
         Connection con = dbConnect.getConnection();
         role = "player";
 
@@ -92,18 +92,16 @@ public class Register{
 
         PreparedStatement ps
                 = con.prepareStatement(
-                        "INSERT INTO die_user (username, password, role) VALUES (?, ?, ?)");
+                        "INSERT INTO die_user (username, password, role) VALUES (?, ?, ?) RETURNING uid");
         ps.setString(1, username);
         ps.setString(2, password);
         ps.setString(3, role);
         
-        ps.executeUpdate();
+        ResultSet result = ps.executeQuery();
         con.close();
         
-        username = null;
-        password = null;
-        email = null;
-        role = null;
+        result.next();
+        uid = result.getInt("uid");
 
         return "success";
     }
