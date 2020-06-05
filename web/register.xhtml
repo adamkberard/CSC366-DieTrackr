@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
+        <title>Register</title>
+        <h1>Registration Screen</h1>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:panelGrid columns="3">
+                Username: <h:inputText value="#{login.getRegistration().username}" required ="true"
+                                       requiredMessage="Your must enter a username."
+                                       validatorMessage="#{login.getRegistration().usernameErrorMessage}"
+                                       validator="#{login.getRegistration().validateUsername}"
+                                       binding="#{login.getRegistration().loginUI}"
+                                       id="username"/>
+                <h:message for="username" style="color:red;margin:8px;"/>
+                
+                Password: <h:inputSecret value="#{login.getRegistration().password}" required ="true"
+                                       requiredMessage="Your must enter a password."
+                                       validatorMessage="#{login.getRegistration().passwordErrorMessage}"
+                                       validator="#{login.getRegistration().validatePassword}"
+                                       id="password"/>
+                <h:message for="password" style="color:red;margin:8px;"/>
+                
+                Password Again: <h:inputSecret required ="true"
+                                               requiredMessage="Your must enter your password again."
+                                               validatorMessage="#{login.getRegistration().passwordErrorMessage}"
+                                               validator="#{login.getRegistration().validatePasswordTwo}"
+                                               id="passwordTwo"/>
+                <h:message for="passwordTwo" style="color:red;margin:8px;"/>
+            </h:panelGrid>
+            <h:panelGrid>
+                <h:commandButton value="Go" action="#{login.getRegistration().go}"/>               
+            </h:panelGrid>
+        </h:form>
+    </h:body>
+</html>
+
+

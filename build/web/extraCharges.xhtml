@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <link href="css/stylesheet.css" rel="stylesheet" type="text/css"/>
+        <title>Additional Charge</title>
+        <h1>Add Extra Charge</h1>
+    </h:head>
+    <h:body>
+        <h:form>
+            
+            <h:panelGrid columns="3">
+                
+                Charge:     <h:selectOneMenu value="#{ExtraCharge.desc}">
+                                    <f:selectItems value="#{ExtraCharge.getChargeTypes()}"/>
+                            </h:selectOneMenu>
+            </h:panelGrid>
+            
+            <h:panelGrid columns="3">    
+                Reservation ID: <h:inputText value="#{ExtraCharge.res_id}" id="resIDinput"/>
+                <h:message for="resIDinput" style="color:red;margin:16px"/>
+
+            </h:panelGrid>
+            
+            <h:panelGrid columns="3">
+                <h:commandButton value = "New Charge Type" action="#{ExtraCharge.go}"/>                
+                <h:commandButton value = "Add" action="#{ExtraCharge.addCharge()}"/>
+            </h:panelGrid>
+            
+        </h:form>
+    </h:body>
+</html>
