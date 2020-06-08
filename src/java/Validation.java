@@ -41,26 +41,42 @@ public class Validation {
         return "valid";
     }
     
-    public static String validateUsername(String username, int id) throws SQLException{
+    public static boolean teamNameAvailable(String teamName) throws SQLException{
         Connection con = dbConnect.getConnection();
         
         if (con == null) {
             throw new SQLException("Can't get database connection");
         }
+        
         PreparedStatement ps = con.prepareStatement(
-                        "SElECT die_user.id FROM user WHERE die_user.username = ? AND die_user.id != ?");
-        ps.setString(1, username);
-        ps.setInt(2, id);
+                        "SElECT * FROM die_team WHERE die_team.name = ?");
+        ps.setString(1, teamName);
         
         ResultSet result = ps.executeQuery();
-
-        if(result.next()) {
-            result.close();
-            con.close();
-            return "Username is already taken.";
+        
+        return !result.next();
+    }
+    
+    public static int userExists(String username) throws SQLException{
+        Connection con = dbConnect.getConnection();
+        
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
         }
         
-        return "valid";
+        PreparedStatement ps = con.prepareStatement(
+                        "SElECT die_user.uid FROM die_user WHERE die_user.username = ?");
+        ps.setString(1, username);
+        
+        ResultSet result = ps.executeQuery();
+        
+        if(result.next()) {
+            int returnable = result.getInt("uid");
+            result.close();
+            con.close();
+            return returnable;
+        }
+        return -1;
     }
     
     public static String validatePassword(String password) {

@@ -4,8 +4,13 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
     <managed-bean>
-        <managed-bean-name>selector</managed-bean-name>
-        <managed-bean-class>Selector</managed-bean-class>
+        <managed-bean-name>team</managed-bean-name>
+        <managed-bean-class>Team</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>user</managed-bean-name>
+        <managed-bean-class>User</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
      <managed-bean>
@@ -51,8 +56,26 @@
             /homepage.xhtml
         </from-view-id>
         <navigation-case>
-            <from-outcome>listCustomers</from-outcome>
-            <to-view-id>/showAllCustomers.xhtml</to-view-id>
+            <from-outcome>createTeam</from-outcome>
+            <to-view-id>/createTeam.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>viewTeamRequests</from-outcome>
+            <to-view-id>/viewTeamRequests.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>viewAllTeams</from-outcome>
+            <to-view-id>/viewAllTeams.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    viewAllTeams
+    <navigation-rule>
+        <from-view-id>
+            /createTeam.xhtml
+        </from-view-id>
+        <navigation-case>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/homepage.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     
@@ -72,11 +95,11 @@
     
     <navigation-rule>
         <from-view-id>
-            /employeeSettings.xhtml
+            /viewTeamRequests.xhtml
         </from-view-id>
         <navigation-case>
             <from-outcome>success</from-outcome>
-            <to-view-id>/start.xhtml</to-view-id>
+            <to-view-id>/homepage.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 </faces-config>

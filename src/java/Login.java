@@ -1,4 +1,3 @@
-
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,7 +26,7 @@ import javax.inject.Named;
 @Named(value = "login")
 @SessionScoped
 @ManagedBean
-public class Login implements Serializable {
+public class Login implements Serializable{
 
     private DBConnect dbConnect = new DBConnect();
     private UIInput loginUI;
@@ -123,5 +122,4 @@ public class Login implements Serializable {
         Util.invalidateUserSession();
         return "logout";
     }
-
 }
