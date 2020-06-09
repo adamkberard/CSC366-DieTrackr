@@ -56,6 +56,7 @@ public class User implements Serializable {
         returnable.add("Change Game Status");
         returnable.add("See Passed Games");
         returnable.add("Create Game");
+        returnable.add("Create Event");
         return returnable;
     }
     
@@ -205,6 +206,8 @@ public class User implements Serializable {
                 return "seePendingInvites";
             case "View All Teams":
                 return "viewAllTeams";
+            case "Create Event":
+                return "createEvent";
             default:
                 return null;
         }
