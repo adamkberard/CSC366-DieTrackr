@@ -33,6 +33,11 @@
         <managed-bean-class>Validation</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+     <managed-bean>
+        <managed-bean-name>event</managed-bean-name>
+        <managed-bean-class>Event</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
     
     <navigation-rule>
         <from-view-id>*</from-view-id>
@@ -65,12 +70,20 @@
             <to-view-id>/createTeam.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
+            <from-outcome>createEvent</from-outcome>
+            <to-view-id>/createEvent.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
             <from-outcome>viewTeamRequests</from-outcome>
             <to-view-id>/viewTeamRequests.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-outcome>viewAllTeams</from-outcome>
             <to-view-id>/viewAllTeams.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>viewMyTeams</from-outcome>
+            <to-view-id>/viewMyTeams.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-outcome>startGame</from-outcome>
@@ -83,6 +96,10 @@
         <navigation-case>
             <from-outcome>changeGameStatus</from-outcome>
             <to-view-id>/changeGameStatus.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>seePassedGames</from-outcome>
+            <to-view-id>/viewAllGames.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     viewAllTeams
@@ -129,6 +146,16 @@
             <to-view-id>/homepage.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
+  
+    <navigation-rule>
+        <from-view-id>
+            /createEvent.xhtml
+        </from-view-id>
+        <navigation-case>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/homepage.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
     
     <navigation-rule>
         <from-view-id>
@@ -150,6 +177,10 @@
         </from-view-id>
         <navigation-case>
             <from-outcome>done</from-outcome>
+            <to-view-id>/homepage.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>pause</from-outcome>
             <to-view-id>/homepage.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>

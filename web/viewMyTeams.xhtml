@@ -7,7 +7,7 @@
 
     </h:head>
     <body>
-        <h:dataTable value="#{team.getAllTeams()}" var="t" border="1">
+        <h:dataTable value="#{team.getMyTeams()}" var="t" border="1">
             <h:column>
                 <f:facet name="header"> Team Name </f:facet>
                     #{t.name}
@@ -32,7 +32,6 @@
                 <f:facet name="header"> Losses </f:facet>
                     #{team.getTotalLosses(t.name)}
             </h:column>
-            
         </h:dataTable>
     </body>
 </html>

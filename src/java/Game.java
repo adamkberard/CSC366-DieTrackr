@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.ManagedBean;
 import javax.el.ELContext;
 import javax.faces.application.FacesMessage;
@@ -38,10 +40,14 @@ public class Game implements Serializable{
     private int t_2_score = 0;
     private String status;
     
+    private static int updatingT1Score;
+    private static int updatingT2Score;
+    
     private String teamOneErrorMessage;
     private String teamTwoErrorMessage;
+    private String teamOneScoreError;
+    private String teamTWOScoreError;
     
-
     public int getId() {return id;}
     public void setId(int id) {this.id = id;}
     public String getTeam_1() {return team_1;}
@@ -62,6 +68,12 @@ public class Game implements Serializable{
     public void setT_1_score(int t_1_score) {this.t_1_score = t_1_score;}
     public int getT_2_score() {return t_2_score;}
     public void setT_2_score(int t_2_score) {this.t_2_score = t_2_score;}
+    public String getTeamOneScoreError() {return teamOneScoreError;}
+    public String getTeamTWOScoreError() {return teamTWOScoreError;}
+    public void setTeamTWOScoreError(String teamTWOScoreError) {this.teamTWOScoreError = teamTWOScoreError;}
+    
+
+
     
     public Game(){}
     
@@ -71,6 +83,28 @@ public class Game implements Serializable{
         this.t_1_confirmed = t1c;
         this.t_2_confirmed = t2c;
         this.id = game_id;
+    }
+    
+    public Game(String team_1, String team_2, int t1s, int t2s, int game_id){
+        this.team_1 = team_1;
+        this.team_2 = team_2;
+        this.t_1_score = t1s;
+        this.t_2_score = t2s;
+        this.t_1_confirmed = true;
+        this.t_2_confirmed = true;
+        this.id = game_id;
+    }
+            
+    public void validateTeamOneScore(FacesContext context, UIComponent component, Object value)
+            throws ValidatorException, SQLException{
+        
+        updatingT1Score = Integer.parseInt(value.toString());
+    }
+    
+    public void validateTeamTwoScore(FacesContext context, UIComponent component, Object value)
+            throws ValidatorException, SQLException{
+        
+        updatingT2Score = Integer.parseInt(value.toString());
     }
     
     public void validateTeamOne(FacesContext context, UIComponent component, Object value)
@@ -87,25 +121,6 @@ public class Game implements Serializable{
     }
     
     public void validateTeamTwo(FacesContext context, UIComponent component, Object value)
-            throws ValidatorException, SQLException{
-        
-        team_2 = value.toString();
-        boolean temp = Validation.teamExists(team_2);
-        
-        if(!temp){
-            teamTwoErrorMessage = "Team does not exist. Capitalization matters";
-            FacesMessage errorMessage = new FacesMessage(teamTwoErrorMessage);
-            throw new ValidatorException(errorMessage);
-        }
-        
-        if(team_2.equals(team_1)){
-            teamTwoErrorMessage = "Teams must be different.";
-            FacesMessage errorMessage = new FacesMessage(teamTwoErrorMessage);
-            throw new ValidatorException(errorMessage);
-        }
-    }
-            
-    public void validateTeamOneScore(FacesContext context, UIComponent component, Object value)
             throws ValidatorException, SQLException{
         
         team_2 = value.toString();
@@ -176,6 +191,8 @@ public class Game implements Serializable{
         
         ps.setInt(1, id);
         
+        System.out.println(ps);
+        
         ps.executeUpdate();
         
         // Start game if both have confirmed
@@ -218,6 +235,7 @@ public class Game implements Serializable{
     }
     
     public String endGame() throws SQLException{
+        System.out.println("AT END");
         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
         Login login = (Login) elContext.getELResolver().getValue(elContext, null, "login");
         
@@ -229,10 +247,12 @@ public class Game implements Serializable{
         }
         
         
-        ps = con.prepareStatement("UPDATE die_game SET status = 'Done', team_1_score = ?, team_2_score =? WHERE die_game.id = ?");
-        ps.setInt(1, t_1_score);
-        ps.setInt(2, t_2_score);
+        ps = con.prepareStatement("UPDATE die_game SET status = 'Done', team_1_score = ?, team_2_score = ? WHERE die_game.id = ?");
+        ps.setInt(1, updatingT1Score);
+        ps.setInt(2, updatingT2Score);
         ps.setInt(3, id);
+        System.out.println("THIS HERE 5");
+        System.out.println(ps);
         ps.executeUpdate();
         
         con.close();
@@ -240,6 +260,7 @@ public class Game implements Serializable{
     }
     
     public String updateGame() throws SQLException{
+        System.out.println("AT END");
         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
         Login login = (Login) elContext.getELResolver().getValue(elContext, null, "login");
         
@@ -251,15 +272,53 @@ public class Game implements Serializable{
         }
         
         
-        ps = con.prepareStatement("UPDATE die_game SET status = 'Paused', team_1_score = ?, team_2_score = ? WHERE die_game.id = ?");
-        ps.setInt(1, t_1_score);
-        ps.setInt(2, t_2_score);
+        ps = con.prepareStatement("UPDATE die_game SET team_1_score = ?, team_2_score = ? WHERE die_game.id = ?");
+        ps.setInt(1, updatingT1Score);
+        ps.setInt(2, updatingT2Score);
         ps.setInt(3, id);
+        System.out.println("THIS HERE 5");
+        System.out.println(ps);
         ps.executeUpdate();
         
         con.close();
         return "pause";
     }
     
-    
+    public List<Game> getAllGames() throws SQLException{
+        ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+        Login login = (Login) elContext.getELResolver().getValue(elContext, null, "login");
+        
+        List<Game> games = new ArrayList<>();
+        Connection con = dbConnect.getConnection();
+        
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        
+        PreparedStatement ps = con.prepareStatement(
+                "SELECT * FROM die_game WHERE (die_game.team_1 IN (SElECT die_team.name FROM die_team WHERE (die_team.player_1 = ? AND die_team.p_1_confirmed) OR (die_team.player_2 = ? AND die_team.p_2_confirmed))) OR (die_game.team_2 IN (SElECT die_team.name FROM die_team WHERE (die_team.player_1 = ? AND die_team.p_1_confirmed) OR (die_team.player_2 = ? AND die_team.p_2_confirmed))) AND die_game.status = 'Done'");
+                
+        ps.setInt(1, login.getUser().getUid());
+        ps.setInt(2, login.getUser().getUid());
+        ps.setInt(3, login.getUser().getUid());
+        ps.setInt(4, login.getUser().getUid());
+        
+        ResultSet result = ps.executeQuery();
+        
+        String team_1, team_2;
+        int t1s, t2s, game_id;
+        
+        while(result.next()) {
+            team_1 = result.getString("team_1");
+            team_2 = result.getString("team_2");
+            t1s = result.getInt("team_1_score");
+            t2s = result.getInt("team_2_score");
+            game_id = result.getInt("id");
+            
+            games.add(new Game(team_1, team_2, t1s, t2s, game_id));        
+        }
+        result.close();
+        con.close();
+        return games;
+    }
 }

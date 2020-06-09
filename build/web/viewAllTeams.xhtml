@@ -9,6 +9,11 @@
     <body>
         <h:dataTable value="#{team.getAllTeams()}" var="t" border="1">
             <h:column>
+                <f:facet name="header"> Team Name </f:facet>
+                    #{t.name}
+            </h:column>
+            
+            <h:column>
                 <f:facet name="header"> Teammate 1 </f:facet>
                     #{user.getUserFromId(t.player_one_id).getUsername()}
             </h:column>
@@ -17,6 +22,17 @@
                 <f:facet name="header"> Teammate 2 </f:facet>
                     #{user.getUserFromId(t.player_two_id).getUsername()}
             </h:column>
+            
+            <h:column>
+                <f:facet name="header"> Wins </f:facet>
+                    #{team.getTotalWins(t.name)}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header"> Losses </f:facet>
+                    #{team.getTotalLosses(t.name)}
+            </h:column>
+            
         </h:dataTable>
     </body>
 </html>

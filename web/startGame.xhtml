@@ -10,14 +10,14 @@
     <h:body>
         <h:form>
             <h:panelGrid columns="3">
-                Team 1: <h:inputText value="#{game.team_1_name}" required ="true"
+                Team 1: <h:inputText value="#{game.team_1}" required ="true"
                                        requiredMessage="Your must enter a team."
                                        validatorMessage="#{game.teamOneErrorMessage}"
                                        validator="#{game.validateTeamOne}"
                                        id="team_one"/>
                 <h:message for="team_one" style="color:red;margin:8px;"/>
                 
-                Team 2: <h:inputText value="#{game.team_2_name}" required ="true"
+                Team 2: <h:inputText value="#{game.team_2}" required ="true"
                                        requiredMessage="Your must enter team."
                                        validatorMessage="#{game.teamTwoErrorMessage}"
                                        validator="#{game.validateTeamTwo}"

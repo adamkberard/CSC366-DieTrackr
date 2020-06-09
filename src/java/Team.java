@@ -85,6 +85,7 @@ public class Team implements Serializable {
     public String getNameErrorMessage() {return nameErrorMessage;}
     public void setNameErrorMessage(String nameErrorMessage) {this.nameErrorMessage = nameErrorMessage;} 
     
+    
     public void validatePlayerOne(FacesContext context, UIComponent component, Object value)
             throws ValidatorException, SQLException{
         
@@ -145,6 +146,40 @@ public class Team implements Serializable {
 
         ps = con.prepareStatement(
                     "SELECT * FROM die_team WHERE p_1_confirmed AND p_2_confirmed");
+
+        ResultSet result = ps.executeQuery();
+        
+        int tempOneId, tempTwoId;
+        String tempName;
+        while(result.next()){    
+            tempOneId = result.getInt("player_1");
+            tempTwoId = result.getInt("player_2");
+            tempName = result.getString("name");
+            teams.add(new Team(tempOneId, tempTwoId, true, true, tempName));
+        }
+        con.close();
+        
+        return teams;
+    }
+    
+    public List<Team> getMyTeams() throws SQLException{
+        Connection con = dbConnect.getConnection();
+        ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+        Login login = (Login) elContext.getELResolver().getValue(elContext, null, "login");
+        PreparedStatement ps;
+        
+        List<Team> teams = new ArrayList<>();
+        
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+
+        ps = con.prepareStatement(
+                        "SElECT * FROM die_team WHERE ((die_team.player_1 = ? AND die_team.p_1_confirmed) OR"
+                                                   + " (die_team.player_2 = ? AND die_team.p_2_confirmed))");
+        
+        ps.setInt(1, login.getUser().getUid());
+        ps.setInt(2, login.getUser().getUid());
 
         ResultSet result = ps.executeQuery();
         
@@ -262,6 +297,50 @@ public class Team implements Serializable {
         con.close();
 
         return "success";
+    }
+    
+    public int getTotalWins(String team) throws SQLException{
+        int totalWins = 0;
+        Connection con = dbConnect.getConnection();
+        
+        /* Certainly could use the count feature here, but I cycle through in case at some
+           point I want to do something with each game. I probably won't but I can't imagine this
+           is much slower
+        */
+        PreparedStatement ps = con.prepareStatement(
+                "SELECT * FROM die_game WHERE ((team_1 = ? AND team_1_score > team_2_score) OR (team_2 = ? AND team_1_score < team_2_score)) AND die_game.status = 'Done'");
+        ps.setString(1, team);
+        ps.setString(2, team);
+        
+        ResultSet result = ps.executeQuery();
+        
+        while(result.next()){
+            totalWins++;
+        }
+        
+        return totalWins;
+    }
+    
+    public int getTotalLosses(String team) throws SQLException{
+        int totalLosses = 0;
+        Connection con = dbConnect.getConnection();
+        
+        /* Certainly could use the count feature here, but I cycle through in case at some
+           point I want to do something with each game. I probably won't but I can't imagine this
+           is much slower
+        */
+        PreparedStatement ps = con.prepareStatement(
+                "SELECT * FROM die_game WHERE ((team_1 = ? AND team_1_score < team_2_score) OR (team_2 = ? AND team_1_score > team_2_score)) AND die_game.status = 'Done'");
+        ps.setString(1, team);
+        ps.setString(2, team);
+        
+        ResultSet result = ps.executeQuery();
+        
+        while(result.next()){
+            totalLosses++;
+        }
+        
+        return totalLosses;
     }
     
 }
