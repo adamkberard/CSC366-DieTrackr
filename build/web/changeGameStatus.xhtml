@@ -9,7 +9,7 @@
         <h1>Change Game Status Screen</h1>
     </h:head>
     <h:body>
-        <h:form rendered="not empty #{login.getUser().getCurrentGame()}">
+        <h:form>
             <h:panelGrid columns="3">
                 Team 1 Score:<h:inputText value="#{game.t_1_score}" required ="true"
                                           requiredMessage="Your must enter a score."
@@ -27,8 +27,8 @@
 
             </h:panelGrid>
             <h:panelGrid>
-                <h:commandButton value="End Game" action="#{login.getUser().getCurrentGame().endGame()}"/>
                 <h:commandButton value="Update Game" action="#{login.getUser().getCurrentGame().updateGame()}"/>
+                <h:commandButton value="End Game" action="#{login.getUser().getCurrentGame().endGame()}"/>
             </h:panelGrid>
         </h:form>
     </h:body>

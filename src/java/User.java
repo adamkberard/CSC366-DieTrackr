@@ -48,15 +48,14 @@ public class User implements Serializable {
     
     public List<String> getHomepageChoices(){
         List<String> returnable = new ArrayList<>();
-        returnable.add("See Passed Games");
-        returnable.add("Change Game Status");
-        returnable.add("View Game Requests");
         returnable.add("Start Game");
+        returnable.add("Change Game Status");
+        returnable.add("View Passed Games");
+        returnable.add("View Game Requests");
         returnable.add("View All Teams");
         returnable.add("View My Teams");
         returnable.add("View Team Requests");
         returnable.add("Create Team");
-        returnable.add("Create Game");
         returnable.add("Create Event");
         return returnable;
     }
@@ -201,7 +200,7 @@ public class User implements Serializable {
                 return "viewTeamRequests";
             case "Change Game Status":
                 return "changeGameStatus";
-            case "See Passed Games":
+            case "View Passed Games":
                 return "seePassedGames";
             case "See Pending Invites":
                 return "seePendingInvites";

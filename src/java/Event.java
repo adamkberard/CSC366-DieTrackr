@@ -44,7 +44,7 @@ public class Event implements Serializable{
         }
 
         ps = con.prepareStatement(
-                        "INSERT INTO die_event (eventType, uid, gameID) VALUES (?, ?, ?)");
+                        "INSERT INTO die_event (event_type, uid, game_id) VALUES (?, ?, ?)");
         
         ps.setString(1, eventType);
         ps.setInt(2, uid);
