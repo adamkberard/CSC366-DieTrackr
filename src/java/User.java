@@ -48,10 +48,10 @@ public class User implements Serializable {
     
     public List<String> getHomepageChoices(){
         List<String> returnable = new ArrayList<>();
+        returnable.add("Start Game");
         returnable.add("View All Teams");
         returnable.add("View Team Requests");
         returnable.add("Create Team");
-        returnable.add("Start Game");
         returnable.add("End Game");
         returnable.add("See Passed Games");
         returnable.add("Create Game");

@@ -9,7 +9,6 @@ import javax.annotation.ManagedBean;
 import javax.el.ELContext;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
@@ -83,8 +82,7 @@ public class Team implements Serializable {
     public String getName() {return name;}
     public void setName(String name) {this.name = name;}
     public String getNameErrorMessage() {return nameErrorMessage;}
-    public void setNameErrorMessage(String nameErrorMessage) {this.nameErrorMessage = nameErrorMessage;}
-    
+    public void setNameErrorMessage(String nameErrorMessage) {this.nameErrorMessage = nameErrorMessage;} 
     
     public void validatePlayerOne(FacesContext context, UIComponent component, Object value)
             throws ValidatorException, SQLException{

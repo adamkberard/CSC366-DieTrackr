@@ -9,6 +9,11 @@
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     <managed-bean>
+        <managed-bean-name>game</managed-bean-name>
+        <managed-bean-class>Game</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
         <managed-bean-name>user</managed-bean-name>
         <managed-bean-class>User</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
@@ -67,6 +72,11 @@
             <from-outcome>viewAllTeams</from-outcome>
             <to-view-id>/viewAllTeams.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>startGame</from-outcome>
+            <to-view-id>/startGame.xhtml</to-view-id>
+        </navigation-case>
+        startGame
     </navigation-rule>
     viewAllTeams
     <navigation-rule>
@@ -99,6 +109,16 @@
         </from-view-id>
         <navigation-case>
             <from-outcome>success</from-outcome>
+            <to-view-id>/homepage.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>
+            /startGame.xhtml
+        </from-view-id>
+        <navigation-case>
+            <from-outcome>start</from-outcome>
             <to-view-id>/homepage.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>

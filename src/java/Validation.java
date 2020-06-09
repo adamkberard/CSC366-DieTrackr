@@ -79,6 +79,30 @@ public class Validation {
         return -1;
     }
     
+    public static boolean teamExists(String team) throws SQLException{
+        Connection con = dbConnect.getConnection();
+        
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        
+        PreparedStatement ps = con.prepareStatement(
+                        "SElECT * FROM die_team WHERE die_team.name = ?");
+        ps.setString(1, team);
+        
+        System.out.println("HERE 4352");
+        System.out.println(ps);
+        
+        ResultSet result = ps.executeQuery();
+        
+        if(result.next()) {
+            result.close();
+            con.close();
+            return true;
+        }
+        return false;
+    }
+    
     public static String validatePassword(String password) {
         if(password.length() < 6){
             return "Password must be six characters long,";
