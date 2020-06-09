@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    
+    <h:head>
+        <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
+        <title>Create Event</title>
+        <h1>Event Creation Screen</h1>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:panelGrid columns="3">
+                User ID: <h:inputText value="#{event.uid}" required ="true"
+                                       requiredMessage="Your must enter a user ID."
+                                       id="uid"/>
+                <h:message for="uid" style="color:red;margin:8px;"/>
+                
+                Game ID: <h:inputText value="#{event.gameID}" required ="true"
+                                       requiredMessage="Your must enter a game ID."
+                                       id="gameID"/>
+                <h:message for="gameID" style="color:red;margin:8px;"/>
+                
+                Type :      <h:selectOneMenu value="#{event.eventType}">
+                                    <f:selectItems value="#{event.getTypes()}"/>
+                            </h:selectOneMenu>
+                
+            </h:panelGrid>
+            <h:commandButton value="Send Request" action="#{event.addEvent()}"/>
+        </h:form>
+    </h:body>
+</html>
