@@ -2,6 +2,16 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/Users/aberard/Programming/NetBeans%20Stuff/CSC366Project2/web/WEB-INF/faces-config.xml</file>
+            <file>file:/Users/aberard/Programming/NetBeans%20Stuff/CSC366Project2/web/register.xhtml</file>
+            <file>file:/Users/aberard/Programming/NetBeans%20Stuff/CSC366Project2/src/java/Team.java</file>
+            <file>file:/Users/aberard/Programming/NetBeans%20Stuff/CSC366Project2/src/java/User.java</file>
+            <file>file:/Users/aberard/Programming/NetBeans%20Stuff/CSC366Project2/src/java/Validation.java</file>
+            <file>file:/Users/aberard/Programming/NetBeans%20Stuff/CSC366Project2/src/java/Game.java</file>
+            <file>file:/Users/aberard/Programming/NetBeans%20Stuff/CSC366Project2/web/changeGameStatus.xhtml</file>
+            <file>file:/Users/aberard/Programming/NetBeans%20Stuff/CSC366Project2/web/index.xhtml</file>
+            <file>file:/Users/aberard/Programming/NetBeans%20Stuff/CSC366Project2/web/viewGameRequests.xhtml</file>
+        </group>
     </open-files>
 </project-private>

@@ -210,7 +210,7 @@ public class User implements Serializable {
         }
     }
     
-    public Game getCurrentGame(int player) throws SQLException{
+    public Game getCurrentGame() throws SQLException{
         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
         Login login = (Login) elContext.getELResolver().getValue(elContext, null, "login");
         

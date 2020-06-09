@@ -40,6 +40,7 @@ public class Game implements Serializable{
     
     private String teamOneErrorMessage;
     private String teamTwoErrorMessage;
+    
 
     public int getId() {return id;}
     public void setId(int id) {this.id = id;}
@@ -86,6 +87,25 @@ public class Game implements Serializable{
     }
     
     public void validateTeamTwo(FacesContext context, UIComponent component, Object value)
+            throws ValidatorException, SQLException{
+        
+        team_2 = value.toString();
+        boolean temp = Validation.teamExists(team_2);
+        
+        if(!temp){
+            teamTwoErrorMessage = "Team does not exist. Capitalization matters";
+            FacesMessage errorMessage = new FacesMessage(teamTwoErrorMessage);
+            throw new ValidatorException(errorMessage);
+        }
+        
+        if(team_2.equals(team_1)){
+            teamTwoErrorMessage = "Teams must be different.";
+            FacesMessage errorMessage = new FacesMessage(teamTwoErrorMessage);
+            throw new ValidatorException(errorMessage);
+        }
+    }
+            
+    public void validateTeamOneScore(FacesContext context, UIComponent component, Object value)
             throws ValidatorException, SQLException{
         
         team_2 = value.toString();
@@ -208,35 +228,38 @@ public class Game implements Serializable{
             throw new SQLException("Can't get database connection");
         }
         
-        if(Team.userInTeam(login.getUser().getUid(), team_1)){
-            ps = con.prepareStatement(
-                        "UPDATE die_game SET t_1_confirmed = TRUE WHERE id = ?");
-        }
-        else{
-            ps = con.prepareStatement(
-                        "UPDATE die_game SET t_2_confirmed = TRUE WHERE id = ?");
-        }
         
-        ps.setInt(1, id);
-        
+        ps = con.prepareStatement("UPDATE die_game SET status = 'Done', team_1_score = ?, team_2_score =? WHERE die_game.id = ?");
+        ps.setInt(1, t_1_score);
+        ps.setInt(2, t_2_score);
+        ps.setInt(3, id);
         ps.executeUpdate();
         
-        // Start game if both have confirmed
-        ps = con.prepareStatement("SELECT * FROM die_game WHERE die_game.id = ?");
-        ps.setInt(1, id);
+        con.close();
+        return "done";
+    }
+    
+    public String updateGame() throws SQLException{
+        ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+        Login login = (Login) elContext.getELResolver().getValue(elContext, null, "login");
         
-        ResultSet result = ps.executeQuery();
+        Connection con = dbConnect.getConnection();
+        PreparedStatement ps;
         
-        result.next();
-        
-        if(result.getBoolean("t_1_confirmed") && result.getBoolean("t_2_confirmed")){
-            ps = con.prepareStatement("UPDATE die_game SET status = 'In Progress' WHERE die_game.id = ?");
-            ps.setInt(1, id);
-            ps.executeUpdate();
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
         }
         
+        
+        ps = con.prepareStatement("UPDATE die_game SET status = 'Paused', team_1_score = ?, team_2_score = ? WHERE die_game.id = ?");
+        ps.setInt(1, t_1_score);
+        ps.setInt(2, t_2_score);
+        ps.setInt(3, id);
+        ps.executeUpdate();
+        
         con.close();
-        return "accept";
+        return "pause";
     }
+    
     
 }
