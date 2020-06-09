@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
+        <title>Change Game Status</title>
+        <h1>Change Game Status Screen</h1>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:panelGrid columns="3">
+                Team 1 Score:<h:inputText value="#{login.getUser().getCurrentGame().t_1_score}" required ="true"
+                                          requiredMessage="Your must enter a score."
+                                          id="team_1_score"/>
+                <h:message for="team_1_score" style="color:red;margin:8px;"/>
+                
+                Team 2 Score:<h:inputText value="#{login.getUser().getCurrentGame().t_2_score}" required ="true"
+                                          requiredMessage="Your must enter a score."
+                                          id="team_2_score"/>
+                <h:message for="team_2_score" style="color:red;margin:8px;"/>
+
+            </h:panelGrid>
+            <h:panelGrid>
+                <h:commandButton value="End Game" action="#{login.getUser().getCurrentGame().endGame()}"/>  
+                <h:commandButton value="Update Game" action="#{login.getUser().getCurrentGame().updateGame()}"/>
+            </h:panelGrid>
+        </h:form>
+    </h:body>
+</html>
+
+

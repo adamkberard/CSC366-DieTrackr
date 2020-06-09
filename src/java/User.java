@@ -48,17 +48,18 @@ public class User implements Serializable {
     
     public List<String> getHomepageChoices(){
         List<String> returnable = new ArrayList<>();
+        returnable.add("View Game Requests");
         returnable.add("Start Game");
         returnable.add("View All Teams");
         returnable.add("View Team Requests");
         returnable.add("Create Team");
-        returnable.add("End Game");
+        returnable.add("Change Game Status");
         returnable.add("See Passed Games");
         returnable.add("Create Game");
         return returnable;
     }
     
-    public List<Team> getRequests() throws SQLException{
+    public List<Team> getTeamRequests() throws SQLException{
         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
         Login login = (Login) elContext.getELResolver().getValue(elContext, null, "login");
         
@@ -93,6 +94,46 @@ public class User implements Serializable {
         result.close();
         con.close();
         return requestedTeams;
+    }
+    
+    public List<Game> getGameRequests() throws SQLException{
+        ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+        Login login = (Login) elContext.getELResolver().getValue(elContext, null, "login");
+        
+        Connection con = dbConnect.getConnection();
+        
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        
+        PreparedStatement ps = con.prepareStatement(
+                "SELECT * FROM die_game WHERE ((die_game.team_1 IN (SElECT die_team.name FROM die_team WHERE (die_team.player_1 = ? AND die_team.p_1_confirmed) OR (die_team.player_2 = ? AND die_team.p_2_confirmed))) AND NOT die_game.t_1_confirmed) OR ((die_game.team_2 IN (SElECT die_team.name FROM die_team WHERE (die_team.player_1 = ? AND die_team.p_1_confirmed) OR (die_team.player_2 = ? AND die_team.p_2_confirmed))) AND NOT die_game.t_2_confirmed) AND die_game.status = 'Pending'");
+                
+        ps.setInt(1, login.getUser().getUid());
+        ps.setInt(2, login.getUser().getUid());
+        ps.setInt(3, login.getUser().getUid());
+        ps.setInt(4, login.getUser().getUid());
+        
+        ResultSet result = ps.executeQuery();
+        
+        List<Game> requestedGames = new ArrayList<>();
+        String team_1, team_2;
+        boolean t1c, t2c;
+        int game_id;
+        
+        while(result.next()) {
+            team_1 = result.getString("team_1");
+            team_2 = result.getString("team_2");
+            t1c = result.getBoolean("t_1_confirmed");
+            t2c = result.getBoolean("t_2_confirmed");
+            game_id = result.getInt("id");
+            System.out.println("HERE 2038");
+            System.out.println(team_2);
+            requestedGames.add(new Game(team_1, team_2, t1c, t2c, game_id));
+        }
+        result.close();
+        con.close();
+        return requestedGames;
     }
     
     public static User getUserFromId(int uid) throws SQLException{
@@ -148,14 +189,16 @@ public class User implements Serializable {
     public String transition() {
 
         switch (choice) {
+            case "View Game Requests":
+                return "viewGameRequests";
             case "Start Game":
                 return "startGame";
             case "Create Team":
                 return "createTeam";
             case "View Team Requests":
                 return "viewTeamRequests";
-            case "End Game":
-                return "endGame";
+            case "Change Game Status":
+                return "changeGameStatus";
             case "See Passed Games":
                 return "seePassedGames";
             case "See Pending Invites":
@@ -165,5 +208,46 @@ public class User implements Serializable {
             default:
                 return null;
         }
+    }
+    
+    public Game getCurrentGame(int player) throws SQLException{
+        ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+        Login login = (Login) elContext.getELResolver().getValue(elContext, null, "login");
+        
+        Connection con = dbConnect.getConnection();
+        
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        
+        PreparedStatement ps = con.prepareStatement(
+                "SELECT * FROM die_game WHERE (die_game.team_1 IN (SElECT die_team.name FROM die_team WHERE (die_team.player_1 = ? AND die_team.p_1_confirmed) OR (die_team.player_2 = ? AND die_team.p_2_confirmed))) OR (die_game.team_2 IN (SElECT die_team.name FROM die_team WHERE (die_team.player_1 = ? AND die_team.p_1_confirmed) OR (die_team.player_2 = ? AND die_team.p_2_confirmed))) AND die_game.status = 'In Progress'");
+                
+        ps.setInt(1, login.getUser().getUid());
+        ps.setInt(2, login.getUser().getUid());
+        ps.setInt(3, login.getUser().getUid());
+        ps.setInt(4, login.getUser().getUid());
+        
+        ResultSet result = ps.executeQuery();
+        
+        String team_1, team_2;
+        boolean t1c, t2c;
+        int game_id;
+        
+        while(result.next()) {
+            team_1 = result.getString("team_1");
+            team_2 = result.getString("team_2");
+            t1c = result.getBoolean("t_1_confirmed");
+            t2c = result.getBoolean("t_2_confirmed");
+            game_id = result.getInt("id");
+            System.out.println("HERE 2038");
+            System.out.println(team_2);
+            result.close();
+            con.close();
+            return (new Game(team_1, team_2, t1c, t2c, game_id));
+        }
+        result.close();
+        con.close();
+        return null;
     }
 }

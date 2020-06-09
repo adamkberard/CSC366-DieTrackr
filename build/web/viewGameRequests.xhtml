@@ -8,33 +8,33 @@
 
     </h:head>
     <body>
-        <h:dataTable value="#{login.getUser().getTeamRequests()}" var="t" border="1">
+        <h:dataTable value="#{login.getUser().getGameRequests()}" var="g" border="1">
             <h:column>
-                <f:facet name="header"> Team Name </f:facet>
-                    #{t.name}
+                <f:facet name="header"> Game Id </f:facet>
+                    #{g.id}
             </h:column>
             
             <h:column>
-                <f:facet name="header"> Teammate 1 </f:facet>
-                    #{user.getUserFromId(t.player_one_id).getUsername()}
+                <f:facet name="header"> Team One </f:facet>
+                    #{g.team_1}
             </h:column>
             
             <h:column>
-                <f:facet name="header"> Teammate 2 </f:facet>
-                    #{user.getUserFromId(t.player_two_id).getUsername()}
+                <f:facet name="header"> Team Two </f:facet>
+                    #{g.team_2}
             </h:column>
             
             <h:column>
                 <f:facet name="header"> </f:facet>
                 <h:form>
-                    <h:commandButton value="Accept" action="#{t.confirmRequest()}"/>
+                    <h:commandButton value="Accept" action="#{g.confirmRequest()}"/>
                 </h:form>
             </h:column>
             
             <h:column>
                 <f:facet name="header"> </f:facet>
                 <h:form>
-                    <h:commandButton value="Deny" action="#{t.denyRequest()}"/>
+                    <h:commandButton value="Deny" action="#{g.denyRequest()}"/>
                 </h:form>
             </h:column>
         </h:dataTable>

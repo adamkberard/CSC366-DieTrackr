@@ -76,7 +76,14 @@
             <from-outcome>startGame</from-outcome>
             <to-view-id>/startGame.xhtml</to-view-id>
         </navigation-case>
-        startGame
+        <navigation-case>
+            <from-outcome>viewGameRequests</from-outcome>
+            <to-view-id>/viewGameRequests.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>changeGameStatus</from-outcome>
+            <to-view-id>/changeGameStatus.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
     viewAllTeams
     <navigation-rule>
@@ -119,6 +126,20 @@
         </from-view-id>
         <navigation-case>
             <from-outcome>start</from-outcome>
+            <to-view-id>/homepage.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>
+            /viewGameRequests.xhtml
+        </from-view-id>
+        <navigation-case>
+            <from-outcome>accept</from-outcome>
+            <to-view-id>/homepage.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>deny</from-outcome>
             <to-view-id>/homepage.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>

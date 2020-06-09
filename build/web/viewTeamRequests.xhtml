@@ -8,7 +8,7 @@
 
     </h:head>
     <body>
-        <h:dataTable value="#{login.getUser().getRequests()}" var="t" border="1">
+        <h:dataTable value="#{login.getUser().getTeamRequests()}" var="t" border="1">
             <h:column>
                 <f:facet name="header"> Team Name </f:facet>
                     #{t.name}

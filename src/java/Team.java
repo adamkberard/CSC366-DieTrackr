@@ -64,6 +64,7 @@ public class Team implements Serializable {
         player_one = login.getUser().getUsername();
         return player_one;
     }
+    
     public void setPlayer_one(String player_one) {this.player_one = player_one;}
     public String getPlayer_two() {return player_two;}
     public void setPlayer_two(String player_two) {this.player_two = player_two;}
@@ -160,6 +161,24 @@ public class Team implements Serializable {
         return teams;
     }
     
+    public static boolean userInTeam(int player_id, String team) throws SQLException{
+        DBConnect dbConnect = new DBConnect();
+        Connection con = dbConnect.getConnection();
+        PreparedStatement ps;
+        
+        ps = con.prepareStatement(
+                    "SELECT * FROM die_team WHERE p_1_confirmed AND p_2_confirmed AND name = ? AND"
+                  + "(die_team.player_1 = ? or die_team.player_2 = ?)");
+        ps.setString(1, team);
+        ps.setInt(2, player_id);
+        ps.setInt(3, player_id);
+        
+        ResultSet result = ps.executeQuery();
+        
+        con.close();
+        return result.next();
+    }
+    
     public String confirmRequest() throws SQLException{
         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
         Login login = (Login) elContext.getELResolver().getValue(elContext, null, "login");
@@ -190,7 +209,7 @@ public class Team implements Serializable {
         return "success";
     }
     
-    public String denyPlayer() throws SQLException{
+    public String denyRequest() throws SQLException{
         ELContext elContext = FacesContext.getCurrentInstance().getELContext();
         Login login = (Login) elContext.getELResolver().getValue(elContext, null, "login");
         Connection con = dbConnect.getConnection();
