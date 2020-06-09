@@ -33,6 +33,11 @@
         <managed-bean-class>Validation</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+     <managed-bean>
+        <managed-bean-name>event</managed-bean-name>
+        <managed-bean-class>Event</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
     
     <navigation-rule>
         <from-view-id>*</from-view-id>
@@ -63,6 +68,10 @@
         <navigation-case>
             <from-outcome>createTeam</from-outcome>
             <to-view-id>/createTeam.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>createEvent</from-outcome>
+            <to-view-id>/createEvent.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-outcome>viewTeamRequests</from-outcome>
@@ -126,6 +135,16 @@
         </from-view-id>
         <navigation-case>
             <from-outcome>start</from-outcome>
+            <to-view-id>/homepage.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+  
+    <navigation-rule>
+        <from-view-id>
+            /createEvent.xhtml
+        </from-view-id>
+        <navigation-case>
+            <from-outcome>success</from-outcome>
             <to-view-id>/homepage.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
